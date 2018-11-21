@@ -1,0 +1,185 @@
+import sys, os
+  5 import cStringIO, codecs
+  6 from datetime import date, datetime, timedelta
+  7 from sqlalchemy import create_engine
+  8 
+  9 db_conn_str = 'postgresql://ruishi:ruishi123@localhost:5432/rs01'
+ 10 db_engine = create_engine(db_conn_str, convert_unicode=True)
+ 11 
+ 12 
+ 13 import urllib, json
+ 14 
+ 15 import smtplib
+ 16 from email.mime.multipart import MIMEMultipart
+ 17 from email.mime.text import MIMEText
+ 18 from email.mime.base import MIMEBase
+ 19 from email.header import Header
+ 20 from email.utils import formatdate
+ 21 from email import encoders
+ 22 
+ 23 #mailto_list = ["yangy@3irobotics.com", "linzq1019@3irobotics.com", "wuzx1005@3irobotics.com", "huyf1089@3irobotics.com", "hexx1067@3irobotics.com"]
+ 24 #mailcc_list = ["yufb1026@3irobotics.com", "yu@3irobotics.net"]
+ 25 mailto_list = ["wuzx1005@3irobotics.com", "chenjb1007@3irobotics.com", "linzq1019@3irobotics.com"]
+ 26 mailcc_list = ["gaoqs1177@3irobotics.com"]
+ 27 #mailcc_list = [""]
+ 28 mail_host = "mail.3irobotics.net"
+ 29 mail_user = "noreply@3irobotics.net"
+ 30 mail_pass = "ruishi123"
+
+def generate_report_title():
+ 34         return u'[普桑尼克]10.20 -11.16 每日用户注册绑定量统计'
+ 35 
+ 36 def send_mail(to_list, cc_list, subject, content, content_mime='plain'):
+ 37     #msg = MIMEText(content, content_mime, 'utf-8')
+ 38     msg = MIMEMultipart()
+ 39     msg['Subject'] = Header(subject, 'utf-8')
+ 40     #msg['From'] = Header(mail_user, 'utf-8')
+ 41     #msg['To'] = Header(";".join(to_list), 'utf-8')
+ 42     #msg['CC'] = Header(";".join(cc_list), 'utf-8')
+ 43     msg['From'] = mail_user
+ 44     msg['To'] = ";".join(to_list)
+ 45     msg['CC'] = ";".join(cc_list)
+ 46     msg.attach(MIMEText(content, content_mime, 'utf-8'))
+ 47 
+ 48     part = MIMEBase('application', "octet-stream")
+ 49     with open(g_export_excel_file, "rb") as f:
+ 50         part.set_payload(f.read())
+ 51     encoders.encode_base64(part)
+ 52     part.add_header('Content-Disposition', 'attachment; filename="%s"' % os.path.basename(g_export_excel_file))
+ 53     msg.attach(part)
+ 54 
+ 55     try:
+ 56         #s = smtplib.SMTP()
+ 57         s = smtplib.SMTP_SSL()
+ 58         #s.set_debuglevel(1)
+ 59         s.connect(mail_host)
+ 60         #if s.has_extn("starttls"):
+ 61         #    s.starttls()
+ 62         s.login(mail_user, mail_pass)
+ 63         s.sendmail(mail_user, to_list + cc_list, msg.as_string())
+ 64         s.close()
+ 65         return True
+ 66     except Exception, e:
+ 67         print str(e)
+            return False
+ 69 
+ 70 def export_excel(excel_file, register_list, bind_list):
+ 71     import xlwt
+ 72     wb = xlwt.Workbook()
+ 73     ws = wb.add_sheet(u'按照注册时间查询')
+ 74     header_titles = [u'用户名', u'注册时间', u'绑定时间', u'设备SN', u'设备ID', u'软件版本号']
+ 75     j = 0
+ 76     for key in header_titles:
+ 77         ws.write(0, j, key)
+ 78         j += 1
+ 79     i = 1
+ 80     for item in register_list:
+ 81         ws.write(i, 0,item['username'])
+ 82         ws.write(i, 1,item['ctime'])
+ 83         ws.write(i, 2,item['bindtime'])
+ 84         ws.write(i, 3,item['sn'])
+ 85         ws.write(i, 4,item['devid'])
+ 86         ws.write(i, 5,item['softversion'])
+ 87         i += 1
+ 88 
+ 89     ws2 = wb.add_sheet(u'按照绑定时间查询')
+ 90     j = 0
+ 91     for item in header_titles:
+ 92         ws2.write(0, j, item)
+ 93         j += 1
+ 94     i = 1
+ 95     for item in bind_list:
+ 96         ws2.write(i, 0, item['username'])
+ 97         ws2.write(i, 1, item['ctime'])
+ 98         ws2.write(i, 2, item['bindtime'])
+ 99         ws2.write(i, 3, item['sn'])
+100         ws2.write(i, 4, item['devid'])
+101         ws2.write(i, 5, item['softversion'])
+102         i += 1
+       wb.save(excel_file)
+105 
+106 def generate_html(report_title, register_list, bind_list):
+107     table_record_list = []
+108     table_record_list.append('<html>')
+109     table_record_list.append(u'<strong>%s</strong>' % report_title)
+110 
+111     table_record_list.append('<table width="1200" border="1" cellspacing="0" cellpadding="0" style="border:1px solid #ccc;">')
+112     table_record_list.append(u'<caption style="text-align:left;"><b><big>按照注册时间查询</big></b></caption>')
+113     table_record_list.append(u'<thead><tr><td>用户名</td><td>注册时间</td><td>绑定时间</td><td>设备SN</td><td>设备ID</td><td>软件版本号</td></tr></thead>')
+114     table_record_list.append('<tbody>')
+115     for item in register_list:
+116         table_record_list.append("<tr>")
+117         table_record_list.append("<td> %s </td>" % item['username'])
+118         table_record_list.append("<td> %s </td>" % item['ctime'])
+119         table_record_list.append("<td> %s </td>" % item['bindtime'])
+120         table_record_list.append("<td> %s </td>" % item['sn'])
+121         table_record_list.append("<td> %s </td>" % item['devid'])
+122         table_record_list.append("<td> %s </td>" % item['softversion'])
+123         table_record_list.append("</tr>")
+124     table_record_list.append('</tbody>')
+125     table_record_list.append('</table>')
+126     table_record_list.append('</br></br>')
+127 
+128     table_record_list.append('<table width="1200" border="1" cellspacing="0" cellpadding="0" style="border:1px solid #ccc;">')
+129     table_record_list.append(u'<caption style="text-align:left;"><b><big>按照绑定时间查询</big></b></caption>')
+130     table_record_list.append(u'<thead><tr><td>用户名</td><td>注册时间</td><td>绑定时间</td><td>设备SN</td><td>设备ID</td><td>软件版本号</td></tr></thead>')
+131     table_record_list.append('<tbody>')
+132     for item in bind_list:
+133         table_record_list.append("<tr>")
+134         table_record_list.append("<td> %s </td>" % item['username'])
+135         table_record_list.append("<td> %s </td>" % item['ctime'])
+136         table_record_list.append("<td> %s </td>" % item['bindtime'])
+         table_record_list.append("<td> %s </td>" % item['sn'])
+138         table_record_list.append("<td> %s </td>" % item['devid'])
+139         table_record_list.append("<td> %s </td>" % item['softversion'])
+140         table_record_list.append("</tr>")
+141     table_record_list.append('</tbody>')
+142     table_record_list.append('</table>')
+143 
+144     table_record_list.append('</html>')
+145 
+146     return ''.join(table_record_list)
+147 
+def GetUserRegisterInfo():
+150     user_register_list=[]
+151     result_rows = db_engine.execute("select tbl_user_login.username,tbl_user_login.ctime, tbl_user_devices.ctime as bindtime, tbl_device_info.sn, tbl_device_info.devid,    tbl_device_info.softversion from tbl_user_login left join tbl_user_devices using(uid)  left join tbl_device_info on tbl_user_devices.devid = tbl_device_info.devid  wher    e tbl_user_login.ctime between now()-interval '27 day' and now() and tbl_user_login.mfrs_id = 1005;")
+152     for result_row in result_rows:
+153         ci_stats = {}
+154         if (result_row.bindtime == None):
+155             continue
+156         ci_stats['username'] = str(result_row.username)
+157         ci_stats['ctime'] = str(result_row.ctime)
+158         ci_stats['bindtime'] = str(result_row.bindtime)
+159         ci_stats['sn'] = str(result_row.sn)
+160         ci_stats['devid'] = result_row.devid
+161         ci_stats['softversion'] = str(result_row.softversion)
+162         user_register_list.append(ci_stats)
+163     return user_register_list
+164 
+165 def GetUserBindInfo():
+166     user_bind_list=[]
+167     result_rows = db_engine.execute("select tbl_user_login.username,tbl_user_login.ctime, tbl_user_devices.ctime as bindtime, tbl_device_info.sn, tbl_device_info.devid,    tbl_device_info.softversion from tbl_user_login left join tbl_user_devices using(uid)  left join tbl_device_info on tbl_user_devices.devid = tbl_device_info.devid  wher    e tbl_user_devices.ctime between now()-interval '27 day' and now() and tbl_user_login.mfrs_id = 1005;")
+168     for result_row in result_rows:
+169         ci_stats = {}
+170         ci_stats['username'] = str(result_row.username)
+171         ci_stats['ctime'] = str(result_row.ctime)
+172         ci_stats['bindtime'] = str(result_row.bindtime)
+173         ci_stats['sn'] = str(result_row.sn)
+174         ci_stats['devid'] = result_row.devid
+175         ci_stats['softversion'] = str(result_row.softversion)
+176         user_bind_list.append(ci_stats)
+177     return user_bind_list
+ g_export_excel_file = '/home/ruishi/test/email/user_bind_info.xls'
+180 
+181 def main():
+182     print "db: ", db_conn_str
+183     report_title = generate_report_title()
+184     user_register_info = GetUserRegisterInfo()
+185     user_bind_info = GetUserBindInfo()
+186     export_excel(g_export_excel_file,user_register_info, user_bind_info)
+187 
+188     html_content = generate_html(report_title, user_register_info, user_bind_info)
+189     send_mail(mailto_list, mailcc_list, report_title, html_content, 'html')
+190 
+191 if __name__ == '__main__':
+192     main()
