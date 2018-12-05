@@ -1,1 +1,152 @@
-122
+创建本地分支并切换
+git checkout -b 分支名
+
+查看当前分支:
+git branch -vv
+
+解决冲突:
+执行git checkout -f，然后再执行git pull重新checkout
+
+新建本地分支与远程分支关联
+git branch –set-upstream 本地新建分支名 origin/远程分支名
+
+git add .
+git commit -m ""
+git push 
+
+提交本地分支到远程仓库
+git push origin 本地分支名
+gdb --args ./da -f ../../conf/rs_be.json -d
+
+删除git上文件
+git rm -f acss/bin/acss
+查看修改的不同文件
+git st .
+查看分支
+git br -avv
+
+git fetch
+合并代码：
+git merge origin/master 
+
+删除空格：
+：%s/\s\+$//
+
+tab转4个空格
+%retab!
+
+http://www.cplusplus.com/reference/string/string/substr/
+https://gocn.vip/question/2026
+
+生成ca公私钥
+ openssl genrsa -out ca.key 1024
+ 生成CSR
+ openssl req -new -key ca.key -out ca.csr
+生成签名证书
+  openssl x509 -req -CA ca.crt -CAkey ca.key -CAcreateserial -in ca.csr -out client.crt
+
+查看linux 系统发行版本：
+  cat /etc/redhat-release
+  
+  查看linux 系统内核版本:
+  cat /proc/version 
+  获取某个端口的tcp连接数：
+  netstat -nat|grep -i "80"|grep ESTABLISHED|wc -l
+  netstat -anlpt|grep 80
+  
+   监听所有的tcp连接：
+  netstat -n | grep "^tcp" | awk '{print $6}' | sort | uniq -c | sort -n
+  netstat -nat|grep -i "5010"|wc -l
+  
+  查看CPU内核数：
+  grep -c 'model name' /proc/cpuinfo
+
+  查看CPU线程数:
+
+  grep 'processor' /proc/cpuinfo | sort -u | wc -l
+
+ 查看内核运行情况：
+
+  journalctl -xb
+
+查看CPU使用情况：
+  vmstat -n 1
+
+抓包：
+ tcpdump -iany tcp port 5010
+
+聚合网：https://www.juhe.cn/sms
+dzruishi
+ruishi123
+
+tcp time_wait过多处理:
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_fin_timeout = 30
+
+设置hostname
+ hostnamectl set-hostname newname
+
+iptables -F
+
+ 查看磁盘io性能：
+ iostat -x 10
+ iotop
+查看磁盘参数：
+ smartctl -i /dev/hdb
+ 
+阿里云登陆：
+ 3i机器人团队
+ 3irobotics
+ 
+ mkdir -m 711 test  创建带有权限的文件夹
+
+ cat -b test  /cat -n test 查看文件显示行号，b:空格不显示， n:空格也显示
+
+ cat -A test 显示出特殊字符
+
+ 查看文件隐藏的属性： 
+ lsattr  
+ 
+ 设置文件隐藏属性： 
+ chattr +i    文件不能被更改，删除
+chattr +a     文件只能增加数据，不能删除和修改数据，只有root才能设置整个属性
+
+dd if=/etc/passwd of=/tmp/passwd.back   把passwd备份到tmp下， 恢复也一样
+
+查找postgresql 耗时的语句：
+select * from pg_stat_statements order by total_time desc limit 5;
+查找postgresql 读取buffer多的语句：
+select * from pg_stat_statements order by shared_blks_hit+shared_blks_read desc limit 5;
+
+valgrind 使用方式
+valgrind --tool=memcheck --leak-check=full --track-origins=yes --leak-resolution=high --show-reachable=yes --log-file=memchecklog ./mts -f /ssd_disk/ruishi/conf/rs_be.jsonvalgrind 
+ 
+pstack pid 打印栈信息
+
+git show 显示某个版本的更改内容
+
+抓包
+tcpdump -i eth0 -nn port 21
+
+
+开启core 文件： 
+vim /etc/security/limit.conf  
+*  soft      core    unlimited
+
+cat /etc/sysctl.conf
+kernel.core_pattern=/tmp/core_%e_%p
+
+cat /proc/sys/kernel/core_pattern
+/tmp/core_%e_%p
+
+防止误删数据库： 用begin commit or rollback;
+
+2>&1 &
+
+rpm -ql net-snmp
+  rpm -qa|grep -i mysql  查询
+
+  rpm -e mysql --nodeps 删除 
+
