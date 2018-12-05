@@ -16,10 +16,9 @@ git push
 
 提交本地分支到远程仓库
 git push origin 本地分支名
-gdb --args ./da -f ../../conf/rs_be.json -d
 
 删除git上文件
-git rm -f acss/bin/acss
+git rm -f 文件
 查看修改的不同文件
 git st .
 查看分支
@@ -75,10 +74,6 @@ https://gocn.vip/question/2026
 抓包：
  tcpdump -iany tcp port 5010
 
-聚合网：https://www.juhe.cn/sms
-dzruishi
-ruishi123
-
 tcp time_wait过多处理:
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_tw_reuse = 1
@@ -96,10 +91,7 @@ iptables -F
 查看磁盘参数：
  smartctl -i /dev/hdb
  
-阿里云登陆：
- 3i机器人团队
- 3irobotics
- 
+
  mkdir -m 711 test  创建带有权限的文件夹
 
  cat -b test  /cat -n test 查看文件显示行号，b:空格不显示， n:空格也显示
