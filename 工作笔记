@@ -142,3 +142,8 @@ rpm -ql net-snmp
 
   rpm -e mysql --nodeps 删除 
 
+查看redis慢查询
+info commandstats
+
+slowlog get 10
+
