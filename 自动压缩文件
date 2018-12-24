@@ -1,0 +1,33 @@
+自动压缩文件
+
+#!/bin/bash
+date="$(date)"
+dir="/home/ruishi/log"
+cd $dir
+day=$1
+if [ ! -n "$dir" ]; then
+    echo "缺少日志目录, 及要删除日志的天数"
+    exit
+fi
+if [ ! -n "$day" ]; then
+   echo "请选择要删除几天前的日志文件"
+   exit
+fi
+echo "压缩 ${dir} 目录下所有${day}天以前的最后操作的日志文件"
+sleep 1
+
+for file in $(find . -mtime +$day -name '*.log.*')
+#for file in $(find .  -name '*.log.*')
+do
+    #判断文件名是否存在 预防rm -rf 问题
+    if [ ! -f "$file" ]; then
+        echo "${file} 文件不存在"
+        exit
+    elif [[ $file =~ (.*)gz ]]; then
+        continue
+    fi
+     echo "tar -zcf ${file}.tar.gz ${file}"
+     tar -zcf ${file}.tar.gz ${file}
+     echo "rm -rf ${file}"
+    rm -rf $file
+done
