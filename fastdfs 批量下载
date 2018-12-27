@@ -1,0 +1,51 @@
+#!/bin/sh
+
+fastdfs_id='/home/fastdfs/bin/sn.txt'
+file1='/home/fastdfs/bin/downloadfile/'
+
+declare -A map1=()
+declare -A map2=()
+
+cat $fastdfs_id | while read line
+do
+    filename=`echo "$line" | awk '{print $1}'`
+    mkdir -p ${file1}${filename}
+    i=1
+    j=1
+    for eachfast in $(echo "$line" | awk '{for(i=3;i<=NF;i+=2) print $i}');do
+        #    fdfs_download_file $HOME/etc/fdfs/client.conf ${eachfast}
+        #    mv ${eachfast##*/} ${file1}${filename}
+        map1[${i}]=${eachfast}
+        i=$(($i+1))
+    done
+
+    for taskid in $(echo "$line" | awk '{for(i=2;i<=NF;i+=2) print $i}');do
+        map2[${j}]=${taskid}
+        j=$(($j+1))
+    done
+
+    for k1 in ${!map1[@]};do
+        for k2 in ${!map2[@]};do
+            if [ "$k1" -eq "$k2" ];then
+               fdfs_download_file $HOME/etc/fdfs/client.conf ${map1[$k1]}
+               value1=".png"
+               mv ${map1[$k1]##*/} ${map2[$k2]}${value1}
+               mv ${map2[$k2]}${value1} ${file1}${filename}
+            fi
+        done
+    done
+
+done
+
+if [ $? == 0 ]
+then
+  echo "download file success"
+else
+  echo "download file failed"
+  exit 1
+fi
+
+
+#############################
+sn.txt
+设备名 taskid group7/M00/00/00/Ch39aFwdj5SIDRbdAADrMtOZXksAAAANwCW11IAAOtK258.png taskid group3/M00/00/00/Ch39mVwXhtqIc5t_AADrHoY-Co0AAAANQJZ-dIAAOs2542.png taskid group7/M00/00/00/Ch39aFwXeBOIDh2_AABsn92szDYAAAANQHl31oAAGy3838.png taskid group2/M00/00/00/Ch39mVwXd4qIeQFLAABq7Cznr1AAAAANQHd24EAAGsE046.png taskid group4/M00/00/00/Ch39mVwVsU6IafEqAACgY8a59ysAAAANAMZqfgAAKB7884.png
