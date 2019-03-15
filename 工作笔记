@@ -148,6 +148,46 @@ info commandstats
 slowlog get 10
 
 
+nslookup 根据域名查看Ip
+
+两者满足其一：
+grep -E "word1|word2|word3"   file.txt
+
+两者都满足
+grep word1 file.txt | grep word2 |grep word3
+查看总tcp连接数状态：
+ss -s 
+netstat -an | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+ss  -tan|awk 'NR>1{++S[$1]}END{for (a in S) print a,S[a]}'
+
+三表联查：
+
+select A.col1, B.col2, C.col3 from (A left join B on a.col3 = b.col1) left join c on A.col3 = C.col1 Where ......+ 条件
+
+查出哪个IP地址连接最多,将其封了.
+netstat -na|grep ESTABLISHED|awk {print $5}|awk -F: {print $1}|sort|uniq -c|sort -r +0n
+
+netstat -na|grep SYN|awk {print $5}|awk -F: {print $1}|sort|uniq -c|sort -r +0n
+
+nc -nvz  ip port 
+
+lsof -n | grep deleted
+删掉部分占用空间的程序
+lsof |grep delete | grep -v grep | awk '{print $2}' | xargs kill -9
+
+
+查看目录占用磁盘容量：
+du -sh 
+du -h --max-depth=1
+
+monit 源码库
+rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+
+
+unset EDITOR
+unset PAGER
+
 debug 调试go代码
 GODEBUG="schedtrace=300,scheddetail=1" ./main
 
