@@ -147,3 +147,8 @@ info commandstats
 
 slowlog get 10
 
+
+debug 调试go代码
+GODEBUG="schedtrace=300,scheddetail=1" ./main
+
+perf top 分析代码执行位
