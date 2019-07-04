@@ -184,7 +184,13 @@ monit 源码库
 rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 
+设置环境变量：
+PAGER=/bin/more
+export PAGER
+删除环境变量
+unset PAGER
 
+PAGER设置查看文件方式more/less
 unset EDITOR
 unset PAGER
 
