@@ -34,6 +34,9 @@ git merge origin/master
 tab转4个空格
 %retab!
 
+vim 打开没有权限的文件保存：
+%! sudo tee % /dev/null
+
 http://www.cplusplus.com/reference/string/string/substr/
 https://gocn.vip/question/2026
 
