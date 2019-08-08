@@ -63,3 +63,13 @@ https://github.com/PanJiaChen/awesome-bookmarks
 
 前端学习技术
 https://github.com/sorrycc/awesome-f2e-libs
+
+
+好用的shell工具：
+
+glances  比top功能更强大
+axel  多线程下载工具, 比curl ,wget 强
+cloc：代码统计工具，能够统计代码的空行数、注释行、编程语言
+shellcheck：shell脚本静态检查工具，能够识别语法错误以及不规范的写法。
+tig：字符模式下交互查看git项目，可以替代git命令。
+ag：比grep、ack更快的递归搜索文件内容。
