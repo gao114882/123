@@ -28,6 +28,17 @@ git fetch
 合并代码：
 git merge origin/master 
 
+gitlab或github下，a开发者fork了b开发者的项目后，如果b开发人员更新代码后，a开发者如何获得更新？
+查看是否建立了主repo的远程源：
+git remote -v 
+如果里面只能看到你自己的两个源(fetch 和 push)，那就需要添加主repo的源:
+git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
+git remote -v 
+如果想与主repo合并：
+git fetch upstream
+git merge upstream/master
+
+
 删除空格：
 ：%s/\s\+$//
 
