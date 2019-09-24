@@ -28,6 +28,10 @@ git fetch
 合并代码：
 git merge origin/master 
 
+主分支回退到某个版本:
+git reset --hard 139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96 
+git push -f -u origin master 
+
 gitlab或github下，a开发者fork了b开发者的项目后，如果b开发人员更新代码后，a开发者如何获得更新？
 查看是否建立了主repo的远程源：
 git remote -v 
