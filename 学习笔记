@@ -73,3 +73,6 @@ cloc：代码统计工具，能够统计代码的空行数、注释行、编程�
 shellcheck：shell脚本静态检查工具，能够识别语法错误以及不规范的写法。
 tig：字符模式下交互查看git项目，可以替代git命令。
 ag：比grep、ack更快的递归搜索文件内容。
+
+lua 库:
+http://luaforge.net/tags/
