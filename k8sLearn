@@ -1,0 +1,32 @@
+1. 添加镜像源： 
+sudo touch /etc/apt/sources.list.d/kubernetes.list 
+vim /etc/apt/source.list.d/kubernetes.list  
+deb http://mirrors.ustc.edu.cn/kubernetes/apt kubernetes-xenial main 
+
+2. 更新镜像源
+sudo apt update 
+如果出现NO_PUBKEY 需要添加认证Key  
+gpg --keyserver keyserver.ubuntu.com --recv-keys NO_PUBKEY的后面key8位
+gpg --export --armor key8位 |sudo apt-key add -  
+然后再次更新
+
+3. 禁止基础设施 
+3.1 防火墙 
+ sudo ufw diable 
+ 3.2 关闭swap 
+ sudo swapoff -a 
+ 永久关闭swap分区
+ sudo sed -i 's/.*swap.*/#&/' /etc/fstab
+ 
+4. 禁止selinux 
+安装selinux
+sudo apt install -y selinux-utils
+禁止selinux
+setenforce 0 
+重启操作系统
+
+查看selinux 是否关闭
+sudo getenforce 
+
+
+
