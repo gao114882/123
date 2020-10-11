@@ -13,6 +13,8 @@ gpg --export --armor key8位 |sudo apt-key add -
 3. 禁止基础设施 
 3.1 防火墙 
  sudo ufw diable 
+ sudo systemctl stop firewalld 
+ sudo systemctl disable firewalld
  3.2 关闭swap 
  sudo swapoff -a 
  永久关闭swap分区
