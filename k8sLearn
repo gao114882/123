@@ -29,7 +29,10 @@ gpg --export --armor key8位 |sudo apt-key add -
 sudo apt install -y selinux-utils
 禁止selinux
 setenforce 0 
-重启操作系统
+永久关闭 
+vim /etc/selinux/config
+ 修改enforce 为disable
+ 重启操作系统
 
 查看selinux 是否关闭
 sudo getenforce 
