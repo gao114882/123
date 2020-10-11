@@ -1,1 +1,3 @@
-aaa
+生产环境要： 多master架构(3个master, 2个load balancer, 3个etcd, 多个worker)
+
+
