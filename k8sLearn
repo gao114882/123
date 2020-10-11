@@ -18,6 +18,8 @@ gpg --export --armor key8位 |sudo apt-key add -
  永久关闭swap分区
  sudo sed -i 's/.*swap.*/#&/' /etc/fstab
  
+ hostnamectl set-hostname  aaaa
+ 
 4. 禁止selinux 
 安装selinux
 sudo apt install -y selinux-utils
