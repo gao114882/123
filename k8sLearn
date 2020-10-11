@@ -19,10 +19,10 @@ gpg --export --armor key8位 |sudo apt-key add -
  sudo swapoff -a 
  永久关闭swap分区
  sudo sed -i 's/.*swap.*/#&/' /etc/fstab
- 更改主机名
- hostnamectl set-hostname  aaaa
- 配置其他主机名
- vim /etc/hosts
+ 3.3 更改主机名
+  hostnamectl set-hostname  aaaa
+  配置其他主机名
+  vim /etc/hosts
  
 4. 禁止selinux 
 安装selinux
@@ -33,9 +33,23 @@ setenforce 0
 vim /etc/selinux/config
  修改enforce 为disable
  重启操作系统
-
 查看selinux 是否关闭
 sudo getenforce 
+
+4.1 设置时间同步 
+yum install chrony -y 
+vim /etc/chrony.config
+时间主服务器： 修改三项: 
+server 127.127.1.0 iburst
+allow 
+local stratum 10 
+systemctl start chronyd && enable chronyd 
+从主服务器： 修改一项: 
+server 本地ip iburst
+
+chronyc sources 查看时间是否同步
+
+自建CA: openssl cfssl
 
 5. k8s系统网络配置
 5.1 配置内核参数，将桥接的IPV4流量传递到iptables的链
@@ -69,6 +83,7 @@ localAPIEndpoint: advertiseAddress 修改
 networking: 
    podSubnet: 10.244.0.0/16
    serviceSubnet: 10.96.0.0/12
+   
    
  8.拉取k8s必备的模块镜像
  查看需要拉取的镜像
