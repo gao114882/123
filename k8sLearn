@@ -134,3 +134,10 @@ kubectl create -f mysql.yaml
 kubectl get pods 
 查看pod的状态
 kubelctl describe pod mysql 
+
+
+14. k8s 编译
+编译kubelet 
+KUBE_BUILD_PLATFORMS=linux/amd64 make all WHAT=cmd/kubelet GOFLAGS=-v GOGCFLAGS="-N -l"
+编译所有
+KUBE_BUILD_PLATFORMES=linux/amd64 make all GOFLAGS=-v GOGCFLAGS="-N -l"
