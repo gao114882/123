@@ -141,3 +141,16 @@ kubelctl describe pod mysql
 KUBE_BUILD_PLATFORMS=linux/amd64 make all WHAT=cmd/kubelet GOFLAGS=-v GOGCFLAGS="-N -l"
 编译所有
 KUBE_BUILD_PLATFORMES=linux/amd64 make all GOFLAGS=-v GOGCFLAGS="-N -l"
+
+15. k8s 运行
+1. install etcd 
+export PATH="/k8s.io/kubernetes/third_party/etcd:${PATH}"
+
+2. run k8s locally 
+./hack/local-up-cluster.sh -0
+
+3. compile and run k8s locally
+PATH=$PATH KUBERNETES_PROVIDER=local hock/local-up-cluster.sh 
+
+4. get k8s nodes 
+./cluster/kubectl.sh get nodes
