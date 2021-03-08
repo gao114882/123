@@ -60,3 +60,6 @@ golang 边界检查
 go build -gcflags="-d=ssa/check_bce/debug=1" example1.go
 
 Go静态代码检查工具GolangCI-Lint 
+
+CR(code Review) 
+CL (Change List)
