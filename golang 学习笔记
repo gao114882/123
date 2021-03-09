@@ -60,6 +60,8 @@ golang 边界检查
 go build -gcflags="-d=ssa/check_bce/debug=1" example1.go
 
 Go静态代码检查工具GolangCI-Lint 
-
+  golangci-lint run . 
 CR(code Review) 
 CL (Change List)
+
+golang 测试运行时go run -race main.go 检查竞争。
