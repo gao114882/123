@@ -65,3 +65,7 @@ CR(code Review)
 CL (Change List)
 
 golang 测试运行时go run -race main.go 检查竞争。
+
+查看程序在某段时间内内存的增长情况:
+curl -o trace.out http://ip:6060/debug/pprof/trace?seconds=30
+go tool trace trace.out
