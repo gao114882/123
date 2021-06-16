@@ -223,4 +223,10 @@ unset PAGER
 debug 调试go代码
 GODEBUG="schedtrace=300,scheddetail=1" ./main
 
+查看http解析方式是走dns还是files 
+
+GODEBUG="netdns=go+2"  GODEBUG="netdns=go+2" go run main.go 
+
+
 perf top 分析代码执行位
+
